@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/jellydator/ttlcache/v3"
 	"net/http"
 	"os"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/jellydator/ttlcache/v3"
 
 	"github.com/nelkinda/health-go"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
