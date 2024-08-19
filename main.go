@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/jellydator/ttlcache/v3"
 	"net/http"
 	"os"
 	"strings"
@@ -103,6 +104,11 @@ func filterExcludedZones(all []cloudflare.Zone, exclude []string) []cloudflare.Z
 }
 
 func fetchMetrics() {
+	cache := ttlcache.New[string, string](
+		ttlcache.WithTTL[string, string](15 * time.Minute),
+	)
+
+	go cache.Start()
 	var wg sync.WaitGroup
 	zones := fetchZones()
 	accounts := fetchAccounts()
