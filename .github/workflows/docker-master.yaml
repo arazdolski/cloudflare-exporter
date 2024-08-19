@@ -24,7 +24,7 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: |
-            ghcr.io/lablabs/cloudflare_exporter
+            ghcr.io/arazdolski/cloudflare_exporter
           # generate Docker tags based on the following events/attributes
           tags: type=raw,value=latest
 
