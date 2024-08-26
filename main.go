@@ -7,8 +7,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jellydator/ttlcache/v3"
-
 	"github.com/nelkinda/health-go"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/cobra"
@@ -105,11 +103,6 @@ func filterExcludedZones(all []cloudflare.Zone, exclude []string) []cloudflare.Z
 }
 
 func fetchMetrics() {
-	cache := ttlcache.New[string, string](
-		ttlcache.WithTTL[string, string](15 * time.Minute),
-	)
-
-	go cache.Start()
 	var wg sync.WaitGroup
 	zones := fetchZones()
 	accounts := fetchAccounts()
@@ -132,9 +125,9 @@ func fetchMetrics() {
 		filteredZones = filteredZones[len(targetZones):]
 
 		go fetchZoneAnalytics(targetZones, &wg)
-		go fetchZoneColocationAnalytics(targetZones, &wg)
-		go fetchLoadBalancerAnalytics(targetZones, &wg)
-		go fetchLogpushAnalyticsForZone(targetZones, &wg)
+		//go fetchZoneColocationAnalytics(targetZones, &wg)
+		//go fetchLoadBalancerAnalytics(targetZones, &wg)
+		//go fetchLogpushAnalyticsForZone(targetZones, &wg)
 	}
 
 	wg.Wait()
