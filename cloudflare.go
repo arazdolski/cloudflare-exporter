@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/jellydator/ttlcache/v3"
 	"strings"
 	"time"
 
@@ -337,6 +338,10 @@ func fetchAccounts() []cloudflare.Account {
 }
 
 func fetchZoneTotals(zoneIDs []string) (*cloudflareResponse, error) {
+	zoneTotalsCache := ttlcache.New[string, *cloudflareResponse](
+		ttlcache.WithTTL[string, *cloudflareResponse](1 * time.Hour),
+	)
+	go zoneTotalsCache.Start()
 	now := time.Now().Add(-time.Duration(viper.GetInt("scrape_delay")) * time.Second).UTC()
 	s := 60 * time.Second
 	now = now.Truncate(s)
